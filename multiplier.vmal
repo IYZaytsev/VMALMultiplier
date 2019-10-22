@@ -1,0 +1,39 @@
+
+#two number being multiplied  
+A: 0b0101;
+B: 0b0110;
+
+
+#stores result
+C: 0b0000;
+D: 0b0000;
+
+#Value used to check Least significant digit
+F: 0b0001;
+
+LBL bitMask;
+# Copies F to Register E
+MV E,F;
+# sets the flags based on the value of F (Z and N)
+SF F;
+
+#Does and on Register E and B (E is a copy of F) Saves value to register E
+AND E,B;
+
+#Does a left Shift on F
+LS F,F;
+
+#Counts the number of iterations
+ADD 2, 6;
+#Checks if the Value of F is equal to Zero 
+BIZ endProgram;
+
+#Goes back to bitmask until F is equal to zero 
+Go bitMask;
+
+LBL main;
+
+
+#goes here to end program
+LBL endProgram;
+
