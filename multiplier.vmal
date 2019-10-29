@@ -1,7 +1,7 @@
 
 #two number being multiplied  
-A: 25;
-B: 32;
+A: 1010101010;
+B: 2121212121;
 4: 0b10000000000000000000000000000000;
 
 #stores result
@@ -23,11 +23,6 @@ AND E,B;
 #Does a left Shift on F
 LS F,F;
 
-# sets the flags based on the value of F (Z and N)
-SF F;
-
-#Checks if the Value of F is equal to Zero 
-BIZ FINALIteration;
 
 #Flag is set to E to make jump to zeroBit or notZeroBit
 SF E;
@@ -46,12 +41,19 @@ BIZ zeroBitLastDigitZero;
 RS C,C;
 RS D,D;
 ADD D,4;
+
+# sets the flags based on the value of F (Z and N)
+SF F;
+BIZ endProgram;
 Go bitMask;
 
 #If last bit of C is zero No extra instructions for shift from C to D  
 LBL zeroBitLastDigitZero;
 RS C,C;
 RS D,D;
+# sets the flags based on the value of F (Z and N)
+SF F;
+BIZ endProgram;
 Go bitMask;
 
 
@@ -65,65 +67,20 @@ BIZ notZeroBitLastDigitZero;
 RS C,C;
 RS D,D;
 ADD D,4;
-
+# sets the flags based on the value of F (Z and N)
+SF F;
+BIZ endProgram;
 Go bitMask;
 
 #If last bit of C is zero
 LBL notZeroBitLastDigitZero;
 RS C,C;
 RS D,D;
+# sets the flags based on the value of F (Z and N)
+SF F;
+BIZ endProgram;
 Go bitMask;
 
 
-
-
-
-
-#Code copied for final iteration 
-#has two possible outcomes bit is zero or bit is not zero 
-#If last bit of c is 1 extra instructions for shift from C to D
-LBL zeroBitLAST;
-MV E,C;
-AND E,6;
-SF E;
-
-BIZ zeroBitLastDigitZeroLAST;
-RS C,C;
-RS D,D;
-ADD D,4;
-Go endProgram;
-
-#If last bit of C is zero No extra instructions for shift from C to D  
-LBL zeroBitLastDigitZeroLAST;
-RS C,C;
-RS D,D;
-Go endProgram;
-
-
-#has two possible outcomes bit is zero or bit is not zero 
-LBL notZeroBitLAST;
-ADD C,A;
-MV E,C;
-AND E,6;
-SF E;
-BIZ notZeroBitLastDigitZeroLAST;
-RS C,C;
-RS D,D;
-ADD D,4;
-Go endProgram;
-
-
-#If last bit of C is zero
-LBL notZeroBitLastDigitZeroLAST;
-RS C,C;
-RS D,D;
-Go endProgram;
-
-#goes here to end program
-LBL FINALIteration;
-#Flag is set to E to make jump to zeroBit or notZeroBit
-SF E;
-BIZ zeroBitLAST;
-Go notZeroBitLAST;
-
+#Goes here to end program 
 LBL endProgram;
