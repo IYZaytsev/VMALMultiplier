@@ -1,8 +1,8 @@
 
 #two number being multiplied  
-A: 0b0101;
-B: 0b0110;
-
+A: 25;
+B: 32;
+4: 0b10000000000000000000000000000000;
 
 #stores result
 C: 0b0000;
@@ -11,11 +11,11 @@ D: 0b0000;
 #Value used to check Least significant digit
 F: 0b0001;
 
+
+#used to tell where zeros and ones are in B
 LBL bitMask;
 # Copies F to Register E
 MV E,F;
-# sets the flags based on the value of F (Z and N)
-SF F;
 
 #Does and on Register E and B (E is a copy of F) Saves value to register E
 AND E,B;
@@ -23,17 +23,107 @@ AND E,B;
 #Does a left Shift on F
 LS F,F;
 
-#Counts the number of iterations
-ADD 2, 6;
-#Checks if the Value of F is equal to Zero 
-BIZ endProgram;
+# sets the flags based on the value of F (Z and N)
+SF F;
 
-#Goes back to bitmask until F is equal to zero 
+#Checks if the Value of F is equal to Zero 
+BIZ FINALIteration;
+
+#Flag is set to E to make jump to zeroBit or notZeroBit
+SF E;
+BIZ zeroBit;
+Go notZeroBit;
+
+
+#has two possible outcomes bit is zero or bit is not zero 
+#If last bit of c is 1 extra instructions for shift from C to D
+LBL zeroBit;
+MV E,C;
+AND E,6;
+SF E;
+
+BIZ zeroBitLastDigitZero;
+RS C,C;
+RS D,D;
+ADD D,4;
 Go bitMask;
 
-LBL main;
+#If last bit of C is zero No extra instructions for shift from C to D  
+LBL zeroBitLastDigitZero;
+RS C,C;
+RS D,D;
+Go bitMask;
 
+
+#has two possible outcomes bit is zero or bit is not zero 
+LBL notZeroBit;
+ADD C,A;
+MV E,C;
+AND E,6;
+SF E;
+BIZ notZeroBitLastDigitZero;
+RS C,C;
+RS D,D;
+ADD D,4;
+
+Go bitMask;
+
+#If last bit of C is zero
+LBL notZeroBitLastDigitZero;
+RS C,C;
+RS D,D;
+Go bitMask;
+
+
+
+
+
+
+#Code copied for final iteration 
+#has two possible outcomes bit is zero or bit is not zero 
+#If last bit of c is 1 extra instructions for shift from C to D
+LBL zeroBitLAST;
+MV E,C;
+AND E,6;
+SF E;
+
+BIZ zeroBitLastDigitZeroLAST;
+RS C,C;
+RS D,D;
+ADD D,4;
+Go endProgram;
+
+#If last bit of C is zero No extra instructions for shift from C to D  
+LBL zeroBitLastDigitZeroLAST;
+RS C,C;
+RS D,D;
+Go endProgram;
+
+
+#has two possible outcomes bit is zero or bit is not zero 
+LBL notZeroBitLAST;
+ADD C,A;
+MV E,C;
+AND E,6;
+SF E;
+BIZ notZeroBitLastDigitZeroLAST;
+RS C,C;
+RS D,D;
+ADD D,4;
+Go endProgram;
+
+
+#If last bit of C is zero
+LBL notZeroBitLastDigitZeroLAST;
+RS C,C;
+RS D,D;
+Go endProgram;
 
 #goes here to end program
-LBL endProgram;
+LBL FINALIteration;
+#Flag is set to E to make jump to zeroBit or notZeroBit
+SF E;
+BIZ zeroBitLAST;
+Go notZeroBitLAST;
 
+LBL endProgram;
