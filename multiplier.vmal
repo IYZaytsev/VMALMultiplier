@@ -1,7 +1,7 @@
 
 #two number being multiplied  
-A: 1010101010;
-B: 2121212121;
+A: 1264798654;
+B: 2144987643;
 4: 0b10000000000000000000000000000000;
 
 #stores result
@@ -23,60 +23,55 @@ AND E,B;
 #Does a left Shift on F
 LS F,F;
 
-
-#Flag is set to E to make jump to zeroBit or notZeroBit
+#Flag is set to E to make jump to zeroBit or oneBit
 SF E;
 BIZ zeroBit;
-Go notZeroBit;
+Go oneBit;
 
 
-#has two possible outcomes bit is zero or bit is not zero 
-#If last bit of c is 1 extra instructions for shift from C to D
+#Zero Bit if current bit of B is Zero (add Zero to C)
 LBL zeroBit;
+
+#Checks the last bit of C to make sure Shift is carried over to D
 MV E,C;
 AND E,6;
 SF E;
-
-BIZ zeroBitLastDigitZero;
+BIZ LastDigitCisZeroShift;
 RS C,C;
 RS D,D;
 ADD D,4;
 
-# sets the flags based on the value of F (Z and N)
-SF F;
-BIZ endProgram;
-Go bitMask;
-
-#If last bit of C is zero No extra instructions for shift from C to D  
-LBL zeroBitLastDigitZero;
-RS C,C;
-RS D,D;
-# sets the flags based on the value of F (Z and N)
+# Ends program or loops back around 
 SF F;
 BIZ endProgram;
 Go bitMask;
 
 
-#has two possible outcomes bit is zero or bit is not zero 
-LBL notZeroBit;
+#oneBit if current bit of B is one (add A to C)
+LBL oneBit;
+
+#Checks the last bit of C to make sure Shift is carried over to D
 ADD C,A;
 MV E,C;
 AND E,6;
 SF E;
-BIZ notZeroBitLastDigitZero;
+BIZ LastDigitCisZeroShift;
 RS C,C;
 RS D,D;
 ADD D,4;
-# sets the flags based on the value of F (Z and N)
+
+# Ends program or loops back around 
 SF F;
 BIZ endProgram;
 Go bitMask;
 
-#If last bit of C is zero
-LBL notZeroBitLastDigitZero;
+
+#If last bit of C is zero you can just shift  
+LBL LastDigitCisZeroShift;
 RS C,C;
 RS D,D;
-# sets the flags based on the value of F (Z and N)
+
+# Ends program or loops back around 
 SF F;
 BIZ endProgram;
 Go bitMask;
